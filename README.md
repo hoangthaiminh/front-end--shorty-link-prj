@@ -1,6 +1,6 @@
-# front-end of shorty-link
+# front-end for shorty-link
 
-**shorty-link** is a simple n fast URL Shortener API build for CHT-er.
+[**shorty-link**](https://github.com/vedokoush/shorty-link) is a simple n fast URL Shortener API build for CHT-er.
 
 
 ---
@@ -21,6 +21,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 **API Documentation goes [here](http://localhost:8000/docs)**
+
 
 
 
