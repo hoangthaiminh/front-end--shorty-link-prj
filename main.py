@@ -1,14 +1,9 @@
-from app.routers import shortener
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import os
 
-app = FastAPI(
-    #docs_url=None,
-    #redoc_url=None,
-    #openapi_url=None
-)
+app = FastAPI()
 
 # BaseDir
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,5 +16,4 @@ app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), na
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# Include all routers
-app.include_router(shortener.router)
+# Include all routers under here
