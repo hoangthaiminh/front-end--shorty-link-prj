@@ -3,62 +3,52 @@
      Request body: { originalUrl, expireAt, customCode }
      Success 200: { shortUrl, qrCode } // qrCode is data:image/...;base64,...
      422: { detail: [ { loc: [...], msg: "...", type: "..." }, ... ] }
-
    - GET /{code}
      Success 200: returns plain string (redirect URL)
      422: same error shape as above
 */
-
-/* ====== THEME HANDLING (light | dark | auto) ====== */
-// const THEME_KEY = "ui_theme_mode";  // "light" | "dark" | "auto"
-// const themeLink = document.getElementById("theme"); // <link id="theme" ...>
-// const toggleBtn = document.getElementById("theme_toggle");
-
-// function getInitialTheme(){
-  // const saved = localStorage.getItem(THEME_KEY);
-  // return saved || "auto";
-// }
-
-// function applyTheme(mode){
-  // document.body.classList.remove("light", "dark", "auto");
-  // document.body.classList.add(mode);
-
-  // // decide actual css file using system when auto
-  // let finalMode = mode;
-  // if(mode === "auto"){
-    // const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    // finalMode = prefersDark ? "dark" : "light";
-  // }
-
-  // themeLink.href = finalMode === "dark"
-    // ? "/static/css/bootstrap-dark.css"
-    // : "/static/css/bootstrap-light.css";
-
-  // localStorage.setItem(THEME_KEY, mode);
-// }
-
-// // initialize theme
-// let currentTheme = getInitialTheme();
-// applyTheme(currentTheme);
-
-// // toggle cycle: light -> dark -> auto -> light ...
-// if (toggleBtn) {
-  // toggleBtn.addEventListener("click", () => {
-    // const modes = ["light", "dark", "auto"];
-    // const current = localStorage.getItem(THEME_KEY) || "auto";
-    // const next = modes[(modes.indexOf(current) + 1) % modes.length];
-    // applyTheme(next);
-    // toggleBtn.animate([{ transform: "scale(1)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 220 });
-  // });
-// }
-
+/* i already made da dark mode so up to you if want to keep this */
+    /* ====== THEME HANDLING (light | dark | auto) ====== */
+    // const THEME_KEY = "ui_theme_mode";  // "light" | "dark" | "auto"
+    // const themeLink = document.getElementById("theme"); // <link id="theme" ...>
+    // const toggleBtn = document.getElementById("theme_toggle");
+    // function getInitialTheme(){
+      // const saved = localStorage.getItem(THEME_KEY);
+      // return saved || "auto";
+    // }
+    // function applyTheme(mode){
+      // document.body.classList.remove("light", "dark", "auto");
+      // document.body.classList.add(mode);
+      // // decide actual css file using system when auto
+      // let finalMode = mode;
+      // if(mode === "auto"){
+        // const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        // finalMode = prefersDark ? "dark" : "light";
+      // }
+      // themeLink.href = finalMode === "dark"
+        // ? "/static/css/bootstrap-dark.css"
+        // : "/static/css/bootstrap-light.css";
+      // localStorage.setItem(THEME_KEY, mode);
+    // }
+    // // initialize theme
+    // let currentTheme = getInitialTheme();
+    // applyTheme(currentTheme);
+    // // toggle cycle: light -> dark -> auto -> light ...
+    // if (toggleBtn) {
+      // toggleBtn.addEventListener("click", () => {
+        // const modes = ["light", "dark", "auto"];
+        // const current = localStorage.getItem(THEME_KEY) || "auto";
+        // const next = modes[(modes.indexOf(current) + 1) % modes.length];
+        // applyTheme(next);
+        // toggleBtn.animate([{ transform: "scale(1)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 220 });
+      // });
+    // }
 // // react to system change only if user mode is auto
 // if (window.matchMedia) {
   // window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
     // if ((localStorage.getItem(THEME_KEY) || "auto") === "auto") applyTheme("auto");
   // });
 // }
-
 /* ====== DOM refs ====== */
 const btnCreate = document.getElementById("btn_create");
 const inputUrl = document.getElementById("input_url");
@@ -71,31 +61,29 @@ const btnCopy = document.getElementById("btn_copy");
 const btnDownloadQr = document.getElementById("btn_download_qr");
 const createText = document.getElementById("create_text");
 const createLoading = document.getElementById("create_loading");
-
 /* safe DOM checks */
 function $(el){ return document.getElementById(el); }
-
 function clearErrors() {
   document.querySelectorAll(".form-error").forEach(el => el.textContent = "");
   document.querySelectorAll(".form-control").forEach(el => el.classList.remove("is-invalid"));
 }
-
 /* ====== UI helpers ====== */
 function setLoading(on){
   if(!btnCreate || !createLoading || !createText) return;
   btnCreate.disabled = on;
-  createLoading.classList.toggle("hidden", !on);
-  createText.classList.toggle("hidden", on);
+  // createLoading.classList.toggle("hidden", !on);
+  createLoading.classList.toggle("d-none", !on); // Bootstrap support
+  // createText.classList.toggle("hidden", on);
+  createText.classList.toggle("d-none", on); // Bootstrap support
 }
-
 /* show validation/error messages from 422 in a readable form */
 async function parseAndShowValidation(res) {
   let body = null;
-  resultBox.classList.add("hidden");
+  // resultBox.classList.add("hidden");
+  resultBox.classList.add("d-none"); // Bootstrap support
   function isInputFocused() {
     const el = document.activeElement;
     if (!el) return false;
-
     return (
       el.tagName === "INPUT" ||
       el.tagName === "TEXTAREA" ||
@@ -103,30 +91,23 @@ async function parseAndShowValidation(res) {
       el.isContentEditable === true
     );
   }
-
   try { body = await res.json(); } catch(e) {}
-
   if (body && body.detail) {
     body.detail.forEach(err => {
       const loc = err.loc;      // ví dụ ["body", "originalUrl"]
       const msg = err.msg;
-
       const field = loc[1];     // "originalUrl"
-
       // map field → input element's ID
       const map = {
         originalUrl: "input_url",
         expireAt: "expiry_date",
         customCode: "custom_code",
       };
-
       if (map[field]) {
         // lấy input
         const input = document.getElementById(map[field]);
-
         // lấy div error tương ứng
         const errBox = document.getElementById("error_" + map[field]);
-
         if (input) input.classList.add("is-invalid");
         if (errBox) errBox.textContent = msg;
         
@@ -137,45 +118,35 @@ async function parseAndShowValidation(res) {
     });
   }
 }
-
 /* ====== COPY TO CLIPBOARD ====== */
 if (btnCopy) {
   btnCopy.addEventListener("click", async () => {
     let copyTooltip = null;
     let copyTooltipTimer = null;
-
     function showTooltip(target, message) {
       if (copyTooltip) {
         copyTooltip.remove();
         clearTimeout(copyTooltipTimer);
       }
-
       const tooltip = document.createElement("div");
       tooltip.className = "copy-tooltip";
       tooltip.textContent = message;
       document.body.appendChild(tooltip);
-
       const rect = target.getBoundingClientRect();
-
       // Định vị chuẩn với offset scroll
       const viewportTop = rect.top + window.scrollY;
       const viewportLeft = rect.left + window.scrollX;
-
       const spaces = {
         top:    rect.top,
         bottom: window.innerHeight - rect.bottom,
         left:   rect.left,
         right:  window.innerWidth - rect.right
       };
-
       const best = Object.entries(spaces).sort((a,b)=>b[1]-a[1])[0][0];
       tooltip.dataset.pos = best;
-
       const tW = tooltip.offsetWidth;
       const tH = tooltip.offsetHeight;
-
       let top = 0, left = 0;
-
       if (best === "top") {
         top = viewportTop - tH - 14;
         left = viewportLeft + (rect.width - tW) / 2;
@@ -192,14 +163,10 @@ if (btnCopy) {
         top = viewportTop + (rect.height - tH) / 2;
         left = viewportLeft + rect.width + 14;
       }
-
       tooltip.style.top = `${top}px`;
       tooltip.style.left = `${left}px`;
-
       requestAnimationFrame(() => tooltip.classList.add("show"));
-
       copyTooltip = tooltip;
-
       copyTooltipTimer = setTimeout(() => {
         tooltip.classList.remove("show");
         setTimeout(() => {
@@ -210,22 +177,17 @@ if (btnCopy) {
     }
     const val = shortUrlInput && shortUrlInput.value;
     if (!val) return;
-
     try {
       await navigator.clipboard.writeText(val);
-
       btnCopy.classList.add("btn-success");
       showTooltip(btnCopy, "Copied");
-
       setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
     } catch (err) {
       try {
         shortUrlInput.select();
         document.execCommand('copy');
-
         btnCopy.classList.add("btn-success");
         showTooltip(btnCopy, "Copied");
-
         setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
       } catch(e) {
         showTooltip(btnCopy, "Copy failed");
@@ -234,7 +196,6 @@ if (btnCopy) {
     }
   });
 }
-
 /* ====== DOWNLOAD QR (data URL or remote) ====== */
 if (btnDownloadQr) {
   btnDownloadQr.addEventListener("click", async (e) => {
@@ -270,7 +231,6 @@ if (btnDownloadQr) {
     }
   });
 }
-
 /* ====== POST /api/shorten ======
    payload:
    {
@@ -287,13 +247,11 @@ async function createShorten(originalUrl, expireAt = null, customCodeVal = null)
     expireAt: expireAt || null,
     customCode: customCodeVal || null
   };
-
   const res = await fetch("/api/shorten", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-
   if (res.status === 200) {
     return await res.json(); // { shortUrl, qrCode }
   } else if (res.status === 422) {
@@ -305,7 +263,6 @@ async function createShorten(originalUrl, expireAt = null, customCodeVal = null)
     throw new Error(txt || "Server error");
   }
 }
-
 /* ====== GET /{code} ======
    returns plain text redirect link (200) or 422 validation error
 */
@@ -323,7 +280,6 @@ async function lookupCode(code) {
     throw new Error(res.statusText || "Lookup error");
   }
 }
-
 /* ====== UI: bind create button ====== */
 if (btnCreate) {
   btnCreate.addEventListener("click", async (ev) => {
@@ -334,29 +290,27 @@ if (btnCreate) {
     if (!originalUrl) {
       document.getElementById("input_url").classList.add("is-invalid");
       document.getElementById("error_input_url").textContent = "Trường này không được để trống!";
-      resultBox.classList.add("hidden");
+      // resultBox.classList.add("hidden");
+      resultBox.classList.add("d-none"); // Bootstrap support
       inputUrl && inputUrl.focus();
       return;
     }
-
     // prepare payload fields according to API
     const expireAtVal = expiryDate && expiryDate.value ? expiryDate.value : null;
     const customCodeVal = customCode && customCode.value ? customCode.value.trim() : null;
-
     try {
       setLoading(true);
-
       const data = await createShorten(originalUrl, expireAtVal, customCodeVal);
       // expected: data.shortUrl, data.qrCode (data:image/...)
       if (data && data.shortUrl) {
         shortUrlInput.value = data.shortUrl;
         // show result
-        resultBox.classList.remove("hidden");
+        // resultBox.classList.remove("hidden");
+        resultBox.classList.remove("d-none"); // Bootstrap support
         updateWrapWidths();
       } else {
         shortUrlInput.value = "";
       }
-
       if (data && data.qrCode) {
         // qrCode is data:image/... base64
         qrImg.src = data.qrCode;
@@ -373,23 +327,18 @@ if (btnCreate) {
     }
   });
 }
-
 function updateWrapWidths() {
     const items = document.querySelectorAll("#result_box .flex.flex-wrap > *");
     if (items.length === 0) return;
-
     let firstTop = items[0].offsetTop;
-
     items.forEach(el => {
         el.classList.remove("w-full");
-
         // Nếu phần tử nằm ở dòng mới -> offsetTop lớn hơn dòng đầu
         if (el.offsetTop > firstTop) {
             el.classList.add("w-full"); // xuống hàng → chiếm 100%
         }
     });
 }
-
 /* === Các sự kiện === */
 window.addEventListener("load", updateWrapWidths);
 window.addEventListener("resize", updateWrapWidths);
@@ -405,8 +354,80 @@ customCode.addEventListener("keydown", (e) => {
     btnCreate.click();
   }
 });
-
-
+        // Dark mode functionality
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const lightIcon = document.getElementById('light-icon');
+        const darkIcon = document.getElementById('dark-icon');
+        const lightIconMobile = document.getElementById('light-icon-mobile');
+        const darkIconMobile = document.getElementById('dark-icon-mobile');
+        // Set CSS variables for smooth transitions
+        function updateThemeVariables(isDark) {
+            const root = document.documentElement;
+            if (isDark) {
+                root.style.setProperty('--navbar-bg', '#171717');
+                root.style.setProperty('--navbar-border', '#262626');
+            } else {
+                root.style.setProperty('--navbar-bg', '#ffffff');
+                root.style.setProperty('--navbar-border', '#e5e7eb');
+            }
+        }
+        // Set dark mode as default on first visit
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'dark');
+        }
+        // Initialize theme
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'dark') {
+            html.classList.add('dark');
+            if (lightIcon) lightIcon.classList.remove('d-none'); // Bootstrap support
+            if (darkIcon) darkIcon.classList.add('d-none'); // Bootstrap support
+            if (lightIconMobile) lightIconMobile.classList.remove('d-none'); // Bootstrap support
+            if (darkIconMobile) darkIconMobile.classList.add('d-none'); // Bootstrap support
+            updateThemeVariables(true);
+        } else {
+            html.classList.remove('dark');
+            if (lightIcon) lightIcon.classList.add('d-none'); // Bootstrap support
+            if (darkIcon) darkIcon.classList.remove('d-none'); // Bootstrap support
+            if (lightIconMobile) lightIconMobile.classList.add('d-none'); // Bootstrap support
+            if (darkIconMobile) darkIconMobile.classList.remove('d-none'); // Bootstrap support
+            updateThemeVariables(false);
+        }
+        // Toggle theme function
+        function toggleTheme() {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeVariables(isDark);
+            
+            // Update both desktop and mobile icons
+            if (isDark) {
+                if (lightIcon) lightIcon.classList.remove('d-none'); // Bootstrap support
+                if (darkIcon) darkIcon.classList.add('d-none'); // Bootstrap support
+                if (lightIconMobile) lightIconMobile.classList.remove('d-none'); // Bootstrap support
+                if (darkIconMobile) darkIconMobile.classList.add('d-none'); // Bootstrap support
+            } else {
+                if (lightIcon) lightIcon.classList.add('d-none'); // Bootstrap support
+                if (darkIcon) darkIcon.classList.remove('d-none'); // Bootstrap support
+                if (lightIconMobile) lightIconMobile.classList.add('d-none'); // Bootstrap support
+                if (darkIconMobile) darkIconMobile.classList.remove('d-none'); // Bootstrap support
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme); // Add null check
+        if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme); // Add null check
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuOpenIcon = document.getElementById('menu-open-icon');
+        const menuCloseIcon = document.getElementById('menu-close-icon');
+        if (mobileMenuButton && mobileMenu) { // Add null check for Bootstrap compatibility
+          mobileMenuButton.addEventListener('click', () => {
+              mobileMenu.classList.toggle('d-none'); // Bootstrap support
+              if (menuOpenIcon) menuOpenIcon.classList.toggle('d-none'); // Bootstrap support
+              if (menuCloseIcon) menuCloseIcon.classList.toggle('d-none'); // Bootstrap support
+          });
+        }
 /* ====== optionally expose functions to global for manual use/debug ====== */
 window.SHORTENER = {
   createShorten,
