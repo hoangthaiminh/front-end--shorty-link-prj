@@ -1,0 +1,248 @@
+:root{
+  --brand: #2b6ef6;        /* màu chính trường (thay theo ý bạn) */
+  --bg-card: #ffffff;
+  --muted: #6b7280;
+  --glass-border: linear-gradient(90deg, rgba(43,110,246,0.18), rgba(212,0,255,0.12));
+  --trans: all 0.23s ease; /* theo yêu cầu */
+}
+
+/* Toàn trang transition (chú ý hiệu năng) */
+*,
+*::before,
+*::after {
+  transition: var(--trans) !important;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* Card / border đẹp với viền gradient mỏng */
+.card.gradient-border {
+  position: relative;
+  border-radius: 12px;
+  background: var(--bg-card);
+  padding: 1px; /* để hiện viền pseudo */
+}
+.card.gradient-border > .card-inner {
+  border-radius: 11px;
+  background: var(--bg-card);
+  padding: 1.25rem;
+  box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+}
+
+/* Fake gradient border bằng background + padding */
+.card.gradient-border {
+  background: linear-gradient(135deg, rgba(43,110,246,0.09), rgba(212,0,255,0.06));
+  padding: 1px;
+}
+
+/* Nút chính với border nhẹ + subtle hover */
+.btn-brand {
+  background: var(--brand);
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(43,110,246,0.12);
+  border: none;
+}
+.btn-brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(43,110,246,0.14);
+}
+
+/* Input lớn */
+.form-control-lg {
+  border-radius: 10px;
+  padding: .9rem 1rem;
+  border: 1px solid rgba(99,102,241,0.12);
+}
+
+/* QR image styling */
+#qr_image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 6px;
+}
+
+#btn_copy:active i {
+  transform: scale(0.9);
+}
+
+/* Theme toggle button (circular) */
+.theme-toggle {
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  z-index: 1100;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+  border: none;
+  cursor: pointer;
+  transition: all 0.23s ease;
+  overflow: hidden;
+  position: fixed;
+}
+
+/* Icon base */
+.theme-toggle .icon {
+  position: absolute;
+  font-size: 20px;
+  transition: opacity .25s ease, transform .25s ease;
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+/* Từng trạng thái */
+body.light .theme-toggle .icon-light { opacity: 1; transform: scale(1); }
+body.dark .theme-toggle .icon-dark { opacity: 1; transform: scale(1); }
+body.auto .theme-toggle .icon-system { opacity: 1; transform: scale(1); }
+
+/* Trong dark, đổi nền nút */
+body.dark .theme-toggle {
+  background: rgba(20,20,24,0.85);
+  color: #fff;
+}
+
+/* small responsive tweaks */
+@media (max-width:576px){
+  .theme-toggle { right: 10px; top: 10px; width:40px; height:40px; }
+  #qr_image { width:150px; height:150px; }
+}
+
+/* Optional better perf: if want to limit props, replace var(--trans) with
+   transition: background-color .23s ease, color .23s ease, transform .23s ease;
+   (recommended for production) */
+
+.form-error {
+    font-size: 0.85rem;
+    color: #e63946;
+    margin-top: 4px;
+    min-height: 18px;
+}
+
+.form-control.is-invalid {
+    --tw-ring-color: rgb(255 34 34 / var(--tw-ring-opacity, 1));
+    border-color: #e63946 !important;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+*:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.24);
+}
+*:active::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ================== iOS / Smooth scroll ================== */
+html, body, * {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* ================== Legacy IE fallback ================== */
+* {
+    -ms-overflow-style: auto;
+}
+
+/* ==== TOOLTIP ==== */
+.copy-tooltip {
+  position: absolute;
+  background: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(0px);
+  transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.copy-tooltip.show {
+  opacity: 1;
+}
+
+.copy-tooltip[data-pos="top"] {
+  transform: translateY(4px);
+}
+.copy-tooltip[data-pos="top"].show {
+  transform: translateY(0);
+}
+
+.copy-tooltip[data-pos="bottom"] {
+  transform: translateY(-4px);
+}
+.copy-tooltip[data-pos="bottom"].show {
+  transform: translateY(0);
+}
+
+.copy-tooltip[data-pos="left"] {
+  transform: translateX(4px);
+}
+.copy-tooltip[data-pos="left"].show {
+  transform: translateX(0);
+}
+
+.copy-tooltip[data-pos="right"] {
+  transform: translateX(-4px);
+}
+.copy-tooltip[data-pos="right"].show {
+  transform: translateX(0);
+}
+
+/* ---- Arrow ---- */
+.copy-tooltip::after {
+  content: "";
+  position: absolute;
+  border: 6px solid transparent;
+}
+
+.copy-tooltip[data-pos="top"]::after {
+  border-top-color: black;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.copy-tooltip[data-pos="bottom"]::after {
+  border-bottom-color: black;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.copy-tooltip[data-pos="left"]::after {
+  border-left-color: black;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.copy-tooltip[data-pos="right"]::after {
+  border-right-color: black;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
