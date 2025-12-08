@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 :root{
   --brand: #2b6ef6;        /* màu chính trường (thay theo ý bạn) */
   --bg-card: #ffffff;
@@ -11,12 +12,144 @@
 *::before,
 *::after {
   transition: var(--trans) !important;
+=======
+/* Light Mode Variables (Default) */
+:root {
+    /* Theme Colors - Light Mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-tertiary: #374151;
+    --border-primary: #e5e7eb;
+    --border-secondary: #d1d5db;
+    --navbar-bg: #ffffff;
+    --navbar-border: #e5e7eb;
+    --card-bg: #ffffff;
+    --card-header-bg: #f9fafb;
+    --input-bg: #ffffff;
+    --input-border: #d1d5db;
+    --input-focus-border: #3b82f6;
+    
+    /* Brand Colors */
+    --brand: #2563eb;
+    --brand-hover: #1d4ed8;
+    --trans: 0.23s ease;
 }
 
+/* Dark Mode Variables */
+html.dark {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #171717;
+    --bg-tertiary: #262626;
+    --text-primary: #fafafa;
+    --text-secondary: #a3a3a3;
+    --text-tertiary: #d4d4d4;
+    --border-primary: #404040;
+    --border-secondary: #525252;
+    --navbar-bg: #171717;
+    --navbar-border: #262626;
+    --card-bg: #171717;
+    --card-header-bg: #0a0a0a;
+    --input-bg: #262626;
+    --input-border: #404040;
+    --input-focus-border: #60a5fa;
+    --brand-hover: #1e40af;
+    
+    color-scheme: dark;
+}
+
+/* Global Transitions */
+* {
+    transition: background-color var(--trans), color var(--trans), border-color var(--trans), transform var(--trans) !important;
+}
+
+/* Base HTML/Body Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+>>>>>>> Stashed changes
+}
+
+/* Override Tailwind's background classes */
+.bg-gray-50 {
+    background-color: #f9fafb !important;
+}
+
+.bg-white {
+    background-color: #ffffff !important;
+}
+
+.bg-gray-100 {
+    background-color: #f3f4f6 !important;
+}
+
+html.dark .dark\:bg-neutral-950 {
+    background-color: #0a0a0a !important;
+}
+
+html.dark .dark\:bg-neutral-800 {
+    background-color: #262626 !important;
+}
+
+html.dark .dark\:bg-neutral-900 {
+    background-color: #171717 !important;
+}
+
+/* Override Tailwind's hover background classes */
+.hover\:bg-gray-200:hover {
+    background-color: #e5e7eb !important;
+}
+
+html.dark .dark\:hover\:bg-neutral-700:hover {
+    background-color: #404040 !important;
+}
+
+html.dark .dark\:hover\:bg-neutral-800:hover {
+    background-color: #262626 !important;
+}
+
+/* Override Tailwind's text color classes */
+.text-gray-900 {
+    color: #111827 !important;
+}
+
+.text-gray-600 {
+    color: #4b5563 !important;
+}
+
+html.dark .dark\:text-white {
+    color: #fafafa !important;
+}
+
+html.dark .dark\:text-gray-400 {
+    color: #a3a3a3 !important;
+}
+
+/* Override Tailwind's border color classes */
+.border-gray-200 {
+    border-color: #e5e7eb !important;
+}
+
+html.dark .dark\:border-neutral-700 {
+    border-color: #404040 !important;
+}
+
+html.dark .dark\:border-neutral-800 {
+    border-color: #262626 !important;
+}
+
+/* Button Active State */
 button:active {
   transform: scale(0.96);
 }
 
+<<<<<<< Updated upstream
 /* Card / border đẹp với viền gradient mỏng */
 .card.gradient-border {
   position: relative;
@@ -55,6 +188,50 @@ button:active {
   border-radius: 10px;
   padding: .9rem 1rem;
   border: 1px solid rgba(99,102,241,0.12);
+=======
+/* Form Styles */
+input,
+textarea,
+select {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--input-border) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-focus-border) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-secondary) !important;
+    opacity: 0.6;
+}
+
+/* Date input styling fix */
+input[type="date"] {
+    color-scheme: light;
+}
+
+html.dark input[type="date"] {
+    color-scheme: dark;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-primary) !important;
+>>>>>>> Stashed changes
 }
 
 /* QR image styling */
@@ -124,41 +301,113 @@ body.dark .theme-toggle {
 
 .form-error {
     font-size: 0.85rem;
-    color: #e63946;
+    color: #dc2626;
     margin-top: 4px;
     min-height: 18px;
 }
 
+<<<<<<< Updated upstream
 .form-control.is-invalid {
     --tw-ring-color: rgb(255 34 34 / var(--tw-ring-opacity, 1));
     border-color: #e63946 !important;
 }
 
+=======
+.is-invalid {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+html.dark .is-invalid {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Button Styles */
+button {
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn-primary {
+    background: var(--brand);
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.15);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.25);
+}
+
+#btn_copy:active i {
+    transform: scale(0.9);
+}
+
+/* QR Code Styling */
+#qr_image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+html:not(.dark) #qr_image {
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
+}
+
+html.dark #qr_image {
+    border: 1px solid #404040;
+    background-color: #171717;
+}
+
+/* Scrollbar Styling - Light Mode */
+>>>>>>> Stashed changes
 *::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.15);
     border-radius: 10px;
-    transition: background-color 0.3s ease;
 }
 *:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.24);
+    background-color: rgba(0, 0, 0, 0.2);
 }
+<<<<<<< Updated upstream
 *:active::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.3);
+=======
+
+/* Scrollbar Styling - Dark Mode */
+html.dark *::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+html.dark *:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.25);
+>>>>>>> Stashed changes
 }
 *::-webkit-scrollbar-track {
     background: transparent;
 }
 
+<<<<<<< Updated upstream
 /* ================== iOS / Smooth scroll ================== */
 html, body, * {
+=======
+/* Smooth Scrolling */
+html, body {
+>>>>>>> Stashed changes
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
 }
 
+<<<<<<< Updated upstream
 /* ================== Legacy IE fallback ================== */
 * {
     -ms-overflow-style: auto;
@@ -178,12 +427,36 @@ html, body, * {
   transition: opacity 0.18s ease-out, transform 0.18s ease-out;
   z-index: 9999;
   pointer-events: none;
+=======
+/* Copy Tooltip */
+.copy-tooltip {
+    position: absolute;
+    background: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(0px);
+    transition: opacity 0.18s ease-out, transform 0.18s ease-out !important;
+    z-index: 9999;
+    pointer-events: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+html.dark .copy-tooltip {
+    background: #0a0a0a;
+    border: 1px solid #404040;
+>>>>>>> Stashed changes
 }
 
 .copy-tooltip.show {
   opacity: 1;
 }
 
+/* Tooltip positioning */
 .copy-tooltip[data-pos="top"] {
   transform: translateY(4px);
 }
@@ -212,7 +485,11 @@ html, body, * {
   transform: translateX(0);
 }
 
+<<<<<<< Updated upstream
 /* ---- Arrow ---- */
+=======
+/* Tooltip Arrow */
+>>>>>>> Stashed changes
 .copy-tooltip::after {
   content: "";
   position: absolute;
@@ -220,29 +497,107 @@ html, body, * {
 }
 
 .copy-tooltip[data-pos="top"]::after {
+<<<<<<< Updated upstream
   border-top-color: black;
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
+=======
+    border-top-color: #1f2937;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+>>>>>>> Stashed changes
+}
+
+html.dark .copy-tooltip[data-pos="top"]::after {
+    border-top-color: #0a0a0a;
 }
 
 .copy-tooltip[data-pos="bottom"]::after {
+<<<<<<< Updated upstream
   border-bottom-color: black;
   top: -10px;
   left: 50%;
   transform: translateX(-50%);
+=======
+    border-bottom-color: #1f2937;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+>>>>>>> Stashed changes
+}
+
+html.dark .copy-tooltip[data-pos="bottom"]::after {
+    border-bottom-color: #0a0a0a;
 }
 
 .copy-tooltip[data-pos="left"]::after {
+<<<<<<< Updated upstream
   border-left-color: black;
   right: -10px;
   top: 50%;
   transform: translateY(-50%);
+=======
+    border-left-color: #1f2937;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+>>>>>>> Stashed changes
+}
+
+html.dark .copy-tooltip[data-pos="left"]::after {
+    border-left-color: #0a0a0a;
 }
 
 .copy-tooltip[data-pos="right"]::after {
+<<<<<<< Updated upstream
   border-right-color: black;
   left: -10px;
   top: 50%;
   transform: translateY(-50%);
 }
+=======
+    border-right-color: #1f2937;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+html.dark .copy-tooltip[data-pos="right"]::after {
+    border-right-color: #0a0a0a;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    #qr_image { 
+        width: 160px; 
+        height: 160px; 
+    }
+}
+
+/* Utility Classes */
+.bg-primary {
+    background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary) !important;
+}
+
+.bg-tertiary {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.text-primary-color {
+    color: var(--text-primary) !important;
+}
+
+.text-secondary-color {
+    color: var(--text-secondary) !important;
+}
+
+.border-primary-color {
+    border-color: var(--border-primary) !important;
+}
+>>>>>>> Stashed changes

@@ -9,6 +9,7 @@
      422: same error shape as above
 */
 
+<<<<<<< Updated upstream
 /* ====== THEME HANDLING (light | dark | auto) ====== */
 // const THEME_KEY = "ui_theme_mode";  // "light" | "dark" | "auto"
 // const themeLink = document.getElementById("theme"); // <link id="theme" ...>
@@ -59,6 +60,8 @@
   // });
 // }
 
+=======
+>>>>>>> Stashed changes
 /* ====== DOM refs ====== */
 const btnCreate = document.getElementById("btn_create");
 const inputUrl = document.getElementById("input_url");
@@ -73,16 +76,22 @@ const createText = document.getElementById("create_text");
 const createLoading = document.getElementById("create_loading");
 
 /* safe DOM checks */
+<<<<<<< Updated upstream
 function $(el){ return document.getElementById(el); }
+=======
+function $(el) { 
+  return document.getElementById(el); 
+}
+>>>>>>> Stashed changes
 
 function clearErrors() {
   document.querySelectorAll(".form-error").forEach(el => el.textContent = "");
-  document.querySelectorAll(".form-control").forEach(el => el.classList.remove("is-invalid"));
+  document.querySelectorAll("input").forEach(el => el.classList.remove("is-invalid"));
 }
 
 /* ====== UI helpers ====== */
-function setLoading(on){
-  if(!btnCreate || !createLoading || !createText) return;
+function setLoading(on) {
+  if (!btnCreate || !createLoading || !createText) return;
   btnCreate.disabled = on;
   createLoading.classList.toggle("hidden", !on);
   createText.classList.toggle("hidden", on);
@@ -92,6 +101,10 @@ function setLoading(on){
 async function parseAndShowValidation(res) {
   let body = null;
   resultBox.classList.add("hidden");
+<<<<<<< Updated upstream
+=======
+  
+>>>>>>> Stashed changes
   function isInputFocused() {
     const el = document.activeElement;
     if (!el) return false;
@@ -103,28 +116,47 @@ async function parseAndShowValidation(res) {
       el.isContentEditable === true
     );
   }
+<<<<<<< Updated upstream
 
   try { body = await res.json(); } catch(e) {}
 
+=======
+  
+  try { 
+    body = await res.json(); 
+  } catch(e) {}
+  
+>>>>>>> Stashed changes
   if (body && body.detail) {
     body.detail.forEach(err => {
-      const loc = err.loc;      // ví dụ ["body", "originalUrl"]
+      const loc = err.loc;
       const msg = err.msg;
+<<<<<<< Updated upstream
 
       const field = loc[1];     // "originalUrl"
 
+=======
+      const field = loc[1];
+      
+>>>>>>> Stashed changes
       // map field → input element's ID
       const map = {
         originalUrl: "input_url",
         expireAt: "expiry_date",
         customCode: "custom_code",
       };
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       if (map[field]) {
-        // lấy input
         const input = document.getElementById(map[field]);
+<<<<<<< Updated upstream
 
         // lấy div error tương ứng
+=======
+>>>>>>> Stashed changes
         const errBox = document.getElementById("error_" + map[field]);
 
         if (input) input.classList.add("is-invalid");
@@ -143,21 +175,34 @@ if (btnCopy) {
   btnCopy.addEventListener("click", async () => {
     let copyTooltip = null;
     let copyTooltipTimer = null;
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
     function showTooltip(target, message) {
       if (copyTooltip) {
         copyTooltip.remove();
         clearTimeout(copyTooltipTimer);
       }
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       const tooltip = document.createElement("div");
       tooltip.className = "copy-tooltip";
       tooltip.textContent = message;
       document.body.appendChild(tooltip);
+<<<<<<< Updated upstream
 
       const rect = target.getBoundingClientRect();
 
       // Định vị chuẩn với offset scroll
+=======
+      
+      const rect = target.getBoundingClientRect();
+>>>>>>> Stashed changes
       const viewportTop = rect.top + window.scrollY;
       const viewportLeft = rect.left + window.scrollX;
 
@@ -170,12 +215,20 @@ if (btnCopy) {
 
       const best = Object.entries(spaces).sort((a,b)=>b[1]-a[1])[0][0];
       tooltip.dataset.pos = best;
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       const tW = tooltip.offsetWidth;
       const tH = tooltip.offsetHeight;
 
       let top = 0, left = 0;
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       if (best === "top") {
         top = viewportTop - tH - 14;
         left = viewportLeft + (rect.width - tW) / 2;
@@ -192,14 +245,22 @@ if (btnCopy) {
         top = viewportTop + (rect.height - tH) / 2;
         left = viewportLeft + rect.width + 14;
       }
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       tooltip.style.top = `${top}px`;
       tooltip.style.left = `${left}px`;
 
       requestAnimationFrame(() => tooltip.classList.add("show"));
 
       copyTooltip = tooltip;
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       copyTooltipTimer = setTimeout(() => {
         tooltip.classList.remove("show");
         setTimeout(() => {
@@ -208,8 +269,10 @@ if (btnCopy) {
         }, 200);
       }, 1200);
     }
+    
     const val = shortUrlInput && shortUrlInput.value;
     if (!val) return;
+<<<<<<< Updated upstream
 
     try {
       await navigator.clipboard.writeText(val);
@@ -218,15 +281,29 @@ if (btnCopy) {
       showTooltip(btnCopy, "Copied");
 
       setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
+=======
+    
+    try {
+      await navigator.clipboard.writeText(val);
+      btnCopy.classList.add("bg-green-600");
+      showTooltip(btnCopy, "Copied");
+      setTimeout(() => btnCopy.classList.remove("bg-green-600"), 900);
+>>>>>>> Stashed changes
     } catch (err) {
       try {
         shortUrlInput.select();
         document.execCommand('copy');
+<<<<<<< Updated upstream
 
         btnCopy.classList.add("btn-success");
         showTooltip(btnCopy, "Copied");
 
         setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
+=======
+        btnCopy.classList.add("bg-green-600");
+        showTooltip(btnCopy, "Copied");
+        setTimeout(() => btnCopy.classList.remove("bg-green-600"), 900);
+>>>>>>> Stashed changes
       } catch(e) {
         showTooltip(btnCopy, "Copy failed");
         console.error(e);
@@ -240,9 +317,9 @@ if (btnDownloadQr) {
   btnDownloadQr.addEventListener("click", async (e) => {
     e.preventDefault();
     if (!qrImg || !qrImg.src) return;
+    
     const src = qrImg.src;
     if (src.startsWith("data:")) {
-      // data url -> direct download
       const a = document.createElement("a");
       a.href = src;
       a.download = "qrcode.png";
@@ -251,7 +328,7 @@ if (btnDownloadQr) {
       a.remove();
       return;
     }
-    // else fetch remote and download blob
+    
     try {
       const resp = await fetch(src, { cache: "no-store" });
       if (!resp.ok) throw new Error("Không tải được QR");
@@ -271,6 +348,7 @@ if (btnDownloadQr) {
   });
 }
 
+<<<<<<< Updated upstream
 /* ====== POST /api/shorten ======
    payload:
    {
@@ -281,39 +359,53 @@ if (btnDownloadQr) {
    response 200: { shortUrl: "string", qrCode: "data:image/..." }
    response 422: { detail: [ ... ] }
 */
+=======
+/* ====== POST /api/shorten ====== */
+>>>>>>> Stashed changes
 async function createShorten(originalUrl, expireAt = null, customCodeVal = null) {
   const payload = {
     originalUrl: originalUrl,
     expireAt: expireAt || null,
     customCode: customCodeVal || null
   };
+<<<<<<< Updated upstream
 
+=======
+  
+>>>>>>> Stashed changes
   const res = await fetch("/api/shorten", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
+<<<<<<< Updated upstream
 
+=======
+  
+>>>>>>> Stashed changes
   if (res.status === 200) {
-    return await res.json(); // { shortUrl, qrCode }
+    return await res.json();
   } else if (res.status === 422) {
-    // validation error
     await parseAndShowValidation(res);
     throw new Error("Validation error");
   } else {
-    const txt = await res.text().catch(()=>res.statusText || "Lỗi server");
+    const txt = await res.text().catch(() => res.statusText || "Lỗi server");
     throw new Error(txt || "Server error");
   }
 }
 
+<<<<<<< Updated upstream
 /* ====== GET /{code} ======
    returns plain text redirect link (200) or 422 validation error
 */
+=======
+/* ====== GET /{code} ====== */
+>>>>>>> Stashed changes
 async function lookupCode(code) {
   const path = "/" + encodeURIComponent(code);
   const res = await fetch(path, { method: "GET" });
+  
   if (res.status === 200) {
-    // server returns plain string body
     const text = await res.text();
     return text;
   } else if (res.status === 422) {
@@ -330,6 +422,7 @@ if (btnCreate) {
     ev.preventDefault();
     clearErrors();
     document.activeElement.blur();
+    
     const originalUrl = inputUrl && inputUrl.value && inputUrl.value.trim();
     if (!originalUrl) {
       document.getElementById("input_url").classList.add("is-invalid");
@@ -338,33 +431,45 @@ if (btnCreate) {
       inputUrl && inputUrl.focus();
       return;
     }
+<<<<<<< Updated upstream
 
     // prepare payload fields according to API
     const expireAtVal = expiryDate && expiryDate.value ? expiryDate.value : null;
     const customCodeVal = customCode && customCode.value ? customCode.value.trim() : null;
 
+=======
+    
+    const expireAtVal = expiryDate && expiryDate.value ? expiryDate.value : null;
+    const customCodeVal = customCode && customCode.value ? customCode.value.trim() : null;
+    
+>>>>>>> Stashed changes
     try {
       setLoading(true);
 
       const data = await createShorten(originalUrl, expireAtVal, customCodeVal);
-      // expected: data.shortUrl, data.qrCode (data:image/...)
+      
       if (data && data.shortUrl) {
         shortUrlInput.value = data.shortUrl;
+<<<<<<< Updated upstream
         // show result
+=======
+>>>>>>> Stashed changes
         resultBox.classList.remove("hidden");
         updateWrapWidths();
       } else {
         shortUrlInput.value = "";
       }
+<<<<<<< Updated upstream
 
+=======
+      
+>>>>>>> Stashed changes
       if (data && data.qrCode) {
-        // qrCode is data:image/... base64
         qrImg.src = data.qrCode;
       } else {
         qrImg.src = "/static/icons/qr-placeholder.png";
       }
     } catch (err) {
-      // console.error("Create error:", err);
       if (err.message && err.message !== "Validation error") {
         alert("Tạo link thất bại: " + err.message);
       }
@@ -375,6 +480,7 @@ if (btnCreate) {
 }
 
 function updateWrapWidths() {
+<<<<<<< Updated upstream
     const items = document.querySelectorAll("#result_box .flex.flex-wrap > *");
     if (items.length === 0) return;
 
@@ -408,6 +514,100 @@ customCode.addEventListener("keydown", (e) => {
 
 
 /* ====== optionally expose functions to global for manual use/debug ====== */
+=======
+  const items = document.querySelectorAll("#result_box .flex.flex-wrap > *");
+  if (items.length === 0) return;
+  
+  let firstTop = items[0].offsetTop;
+  items.forEach(el => {
+    el.classList.remove("w-full");
+    if (el.offsetTop > firstTop) {
+      el.classList.add("w-full");
+    }
+  });
+}
+
+/* ====== DARK MODE ====== */
+const html = document.documentElement;
+const themeToggle = document.getElementById('theme-toggle');
+const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+const lightIcon = document.getElementById('light-icon');
+const darkIcon = document.getElementById('dark-icon');
+const lightIconMobile = document.getElementById('light-icon-mobile');
+const darkIconMobile = document.getElementById('dark-icon-mobile');
+
+// Update icon visibility based on theme
+function updateIcons(isDark) {
+  if (lightIcon && darkIcon) {
+    if (isDark) {
+      lightIcon.classList.remove('hidden');
+      darkIcon.classList.add('hidden');
+    } else {
+      lightIcon.classList.add('hidden');
+      darkIcon.classList.remove('hidden');
+    }
+  }
+  
+  if (lightIconMobile && darkIconMobile) {
+    if (isDark) {
+      lightIconMobile.classList.remove('hidden');
+      darkIconMobile.classList.add('hidden');
+    } else {
+      lightIconMobile.classList.add('hidden');
+      darkIconMobile.classList.remove('hidden');
+    }
+  }
+}
+
+// Set dark mode as default on first visit
+if (!localStorage.getItem('theme')) {
+  localStorage.setItem('theme', 'dark');
+}
+
+// Initialize theme on page load
+const currentTheme = localStorage.getItem('theme') || 'dark';
+const isDarkMode = currentTheme === 'dark';
+
+// Update icons after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  updateIcons(isDarkMode);
+});
+
+// Toggle theme function
+function toggleTheme() {
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  updateIcons(isDark);
+}
+
+if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
+/* ====== Event listeners ====== */
+window.addEventListener("load", updateWrapWidths);
+window.addEventListener("resize", updateWrapWidths);
+
+if (inputUrl) {
+  inputUrl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      btnCreate.click();
+    }
+  });
+}
+
+if (customCode) {
+  customCode.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      btnCreate.click();
+    }
+  });
+}
+
+/* ====== expose functions to global for manual use/debug ====== */
+>>>>>>> Stashed changes
 window.SHORTENER = {
   createShorten,
   lookupCode
