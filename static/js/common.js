@@ -9,56 +9,6 @@
      422: same error shape as above
 */
 
-/* ====== THEME HANDLING (light | dark | auto) ====== */
-// const THEME_KEY = "ui_theme_mode";  // "light" | "dark" | "auto"
-// const themeLink = document.getElementById("theme"); // <link id="theme" ...>
-// const toggleBtn = document.getElementById("theme_toggle");
-
-// function getInitialTheme(){
-  // const saved = localStorage.getItem(THEME_KEY);
-  // return saved || "auto";
-// }
-
-// function applyTheme(mode){
-  // document.body.classList.remove("light", "dark", "auto");
-  // document.body.classList.add(mode);
-
-  // // decide actual css file using system when auto
-  // let finalMode = mode;
-  // if(mode === "auto"){
-    // const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    // finalMode = prefersDark ? "dark" : "light";
-  // }
-
-  // themeLink.href = finalMode === "dark"
-    // ? "/static/css/bootstrap-dark.css"
-    // : "/static/css/bootstrap-light.css";
-
-  // localStorage.setItem(THEME_KEY, mode);
-// }
-
-// // initialize theme
-// let currentTheme = getInitialTheme();
-// applyTheme(currentTheme);
-
-// // toggle cycle: light -> dark -> auto -> light ...
-// if (toggleBtn) {
-  // toggleBtn.addEventListener("click", () => {
-    // const modes = ["light", "dark", "auto"];
-    // const current = localStorage.getItem(THEME_KEY) || "auto";
-    // const next = modes[(modes.indexOf(current) + 1) % modes.length];
-    // applyTheme(next);
-    // toggleBtn.animate([{ transform: "scale(1)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 220 });
-  // });
-// }
-
-// // react to system change only if user mode is auto
-// if (window.matchMedia) {
-  // window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
-    // if ((localStorage.getItem(THEME_KEY) || "auto") === "auto") applyTheme("auto");
-  // });
-// }
-
 /* ====== DOM refs ====== */
 const btnCreate = document.getElementById("btn_create");
 const inputUrl = document.getElementById("input_url");
@@ -73,16 +23,18 @@ const createText = document.getElementById("create_text");
 const createLoading = document.getElementById("create_loading");
 
 /* safe DOM checks */
-function $(el){ return document.getElementById(el); }
+function $(el) { 
+  return document.getElementById(el); 
+}
 
 function clearErrors() {
   document.querySelectorAll(".form-error").forEach(el => el.textContent = "");
-  document.querySelectorAll(".form-control").forEach(el => el.classList.remove("is-invalid"));
+  document.querySelectorAll("input").forEach(el => el.classList.remove("is-invalid"));
 }
 
 /* ====== UI helpers ====== */
-function setLoading(on){
-  if(!btnCreate || !createLoading || !createText) return;
+function setLoading(on) {
+  if (!btnCreate || !createLoading || !createText) return;
   btnCreate.disabled = on;
   createLoading.classList.toggle("hidden", !on);
   createText.classList.toggle("hidden", on);
@@ -92,6 +44,7 @@ function setLoading(on){
 async function parseAndShowValidation(res) {
   let body = null;
   resultBox.classList.add("hidden");
+
   function isInputFocused() {
     const el = document.activeElement;
     if (!el) return false;
@@ -104,27 +57,23 @@ async function parseAndShowValidation(res) {
     );
   }
 
-  try { body = await res.json(); } catch(e) {}
-
+  try { 
+    body = await res.json(); 
+  } catch(e) {}
+  
   if (body && body.detail) {
     body.detail.forEach(err => {
-      const loc = err.loc;      // ví dụ ["body", "originalUrl"]
+      const loc = err.loc;
       const msg = err.msg;
-
-      const field = loc[1];     // "originalUrl"
-
+      const field = loc[1];
       // map field → input element's ID
       const map = {
         originalUrl: "input_url",
         expireAt: "expiry_date",
         customCode: "custom_code",
       };
-
       if (map[field]) {
-        // lấy input
         const input = document.getElementById(map[field]);
-
-        // lấy div error tương ứng
         const errBox = document.getElementById("error_" + map[field]);
 
         if (input) input.classList.add("is-invalid");
@@ -143,21 +92,17 @@ if (btnCopy) {
   btnCopy.addEventListener("click", async () => {
     let copyTooltip = null;
     let copyTooltipTimer = null;
-
     function showTooltip(target, message) {
       if (copyTooltip) {
         copyTooltip.remove();
         clearTimeout(copyTooltipTimer);
       }
-
       const tooltip = document.createElement("div");
       tooltip.className = "copy-tooltip";
       tooltip.textContent = message;
       document.body.appendChild(tooltip);
-
+      
       const rect = target.getBoundingClientRect();
-
-      // Định vị chuẩn với offset scroll
       const viewportTop = rect.top + window.scrollY;
       const viewportLeft = rect.left + window.scrollX;
 
@@ -170,12 +115,10 @@ if (btnCopy) {
 
       const best = Object.entries(spaces).sort((a,b)=>b[1]-a[1])[0][0];
       tooltip.dataset.pos = best;
-
       const tW = tooltip.offsetWidth;
       const tH = tooltip.offsetHeight;
 
       let top = 0, left = 0;
-
       if (best === "top") {
         top = viewportTop - tH - 14;
         left = viewportLeft + (rect.width - tW) / 2;
@@ -192,14 +135,12 @@ if (btnCopy) {
         top = viewportTop + (rect.height - tH) / 2;
         left = viewportLeft + rect.width + 14;
       }
-
       tooltip.style.top = `${top}px`;
       tooltip.style.left = `${left}px`;
 
       requestAnimationFrame(() => tooltip.classList.add("show"));
 
       copyTooltip = tooltip;
-
       copyTooltipTimer = setTimeout(() => {
         tooltip.classList.remove("show");
         setTimeout(() => {
@@ -208,25 +149,22 @@ if (btnCopy) {
         }, 200);
       }, 1200);
     }
+    
     const val = shortUrlInput && shortUrlInput.value;
     if (!val) return;
-
+    
     try {
       await navigator.clipboard.writeText(val);
-
-      btnCopy.classList.add("btn-success");
+      btnCopy.classList.add("bg-green-600");
       showTooltip(btnCopy, "Copied");
-
-      setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
+      setTimeout(() => btnCopy.classList.remove("bg-green-600"), 900);
     } catch (err) {
       try {
         shortUrlInput.select();
         document.execCommand('copy');
-
-        btnCopy.classList.add("btn-success");
+        btnCopy.classList.add("bg-green-600");
         showTooltip(btnCopy, "Copied");
-
-        setTimeout(()=> btnCopy.classList.remove("btn-success"), 900);
+        setTimeout(() => btnCopy.classList.remove("bg-green-600"), 900);
       } catch(e) {
         showTooltip(btnCopy, "Copy failed");
         console.error(e);
@@ -240,9 +178,9 @@ if (btnDownloadQr) {
   btnDownloadQr.addEventListener("click", async (e) => {
     e.preventDefault();
     if (!qrImg || !qrImg.src) return;
+    
     const src = qrImg.src;
     if (src.startsWith("data:")) {
-      // data url -> direct download
       const a = document.createElement("a");
       a.href = src;
       a.download = "qrcode.png";
@@ -251,7 +189,7 @@ if (btnDownloadQr) {
       a.remove();
       return;
     }
-    // else fetch remote and download blob
+    
     try {
       const resp = await fetch(src, { cache: "no-store" });
       if (!resp.ok) throw new Error("Không tải được QR");
@@ -271,49 +209,34 @@ if (btnDownloadQr) {
   });
 }
 
-/* ====== POST /api/shorten ======
-   payload:
-   {
-     originalUrl: "https://example.com/",
-     expireAt: "stringDate" | null,
-     customCode: "string" | null
-   }
-   response 200: { shortUrl: "string", qrCode: "data:image/..." }
-   response 422: { detail: [ ... ] }
-*/
+/* ====== POST /api/shorten ====== */
 async function createShorten(originalUrl, expireAt = null, customCodeVal = null) {
   const payload = {
     originalUrl: originalUrl,
     expireAt: expireAt || null,
     customCode: customCodeVal || null
   };
-
   const res = await fetch("/api/shorten", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-
   if (res.status === 200) {
-    return await res.json(); // { shortUrl, qrCode }
+    return await res.json();
   } else if (res.status === 422) {
-    // validation error
     await parseAndShowValidation(res);
     throw new Error("Validation error");
   } else {
-    const txt = await res.text().catch(()=>res.statusText || "Lỗi server");
+    const txt = await res.text().catch(() => res.statusText || "Lỗi server");
     throw new Error(txt || "Server error");
   }
 }
 
-/* ====== GET /{code} ======
-   returns plain text redirect link (200) or 422 validation error
-*/
 async function lookupCode(code) {
   const path = "/" + encodeURIComponent(code);
   const res = await fetch(path, { method: "GET" });
+  
   if (res.status === 200) {
-    // server returns plain string body
     const text = await res.text();
     return text;
   } else if (res.status === 422) {
@@ -330,6 +253,7 @@ if (btnCreate) {
     ev.preventDefault();
     clearErrors();
     document.activeElement.blur();
+    
     const originalUrl = inputUrl && inputUrl.value && inputUrl.value.trim();
     if (!originalUrl) {
       document.getElementById("input_url").classList.add("is-invalid");
@@ -338,33 +262,27 @@ if (btnCreate) {
       inputUrl && inputUrl.focus();
       return;
     }
-
-    // prepare payload fields according to API
+    
     const expireAtVal = expiryDate && expiryDate.value ? expiryDate.value : null;
     const customCodeVal = customCode && customCode.value ? customCode.value.trim() : null;
-
     try {
       setLoading(true);
 
       const data = await createShorten(originalUrl, expireAtVal, customCodeVal);
-      // expected: data.shortUrl, data.qrCode (data:image/...)
+      
       if (data && data.shortUrl) {
         shortUrlInput.value = data.shortUrl;
-        // show result
         resultBox.classList.remove("hidden");
         updateWrapWidths();
       } else {
         shortUrlInput.value = "";
       }
-
       if (data && data.qrCode) {
-        // qrCode is data:image/... base64
         qrImg.src = data.qrCode;
       } else {
         qrImg.src = "/static/icons/qr-placeholder.png";
       }
     } catch (err) {
-      // console.error("Create error:", err);
       if (err.message && err.message !== "Validation error") {
         alert("Tạo link thất bại: " + err.message);
       }
@@ -375,40 +293,100 @@ if (btnCreate) {
 }
 
 function updateWrapWidths() {
-    const items = document.querySelectorAll("#result_box .flex.flex-wrap > *");
-    if (items.length === 0) return;
-
-    let firstTop = items[0].offsetTop;
-
-    items.forEach(el => {
-        el.classList.remove("w-full");
-
-        // Nếu phần tử nằm ở dòng mới -> offsetTop lớn hơn dòng đầu
-        if (el.offsetTop > firstTop) {
-            el.classList.add("w-full"); // xuống hàng → chiếm 100%
-        }
-    });
+  const items = document.querySelectorAll("#result_box .flex.flex-wrap > *");
+  if (items.length === 0) return;
+  
+  let firstTop = items[0].offsetTop;
+  items.forEach(el => {
+    el.classList.remove("w-full");
+    if (el.offsetTop > firstTop) {
+      el.classList.add("w-full");
+    }
+  });
 }
 
-/* === Các sự kiện === */
+/* ====== DARK MODE ====== */
+const html = document.documentElement;
+const themeToggle = document.getElementById('theme-toggle');
+const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+const lightIcon = document.getElementById('light-icon');
+const darkIcon = document.getElementById('dark-icon');
+const lightIconMobile = document.getElementById('light-icon-mobile');
+const darkIconMobile = document.getElementById('dark-icon-mobile');
+
+// Update icon visibility based on theme
+function updateIcons(isDark) {
+  if (lightIcon && darkIcon) {
+    if (isDark) {
+      lightIcon.classList.remove('hidden');
+      darkIcon.classList.add('hidden');
+    } else {
+      lightIcon.classList.add('hidden');
+      darkIcon.classList.remove('hidden');
+    }
+  }
+  
+  if (lightIconMobile && darkIconMobile) {
+    if (isDark) {
+      lightIconMobile.classList.remove('hidden');
+      darkIconMobile.classList.add('hidden');
+    } else {
+      lightIconMobile.classList.add('hidden');
+      darkIconMobile.classList.remove('hidden');
+    }
+  }
+}
+
+// Set dark mode as default on first visit
+if (!localStorage.getItem('theme')) {
+  localStorage.setItem('theme', 'dark');
+}
+
+// Initialize theme on page load
+const currentTheme = localStorage.getItem('theme') || 'dark';
+const isDarkMode = currentTheme === 'dark';
+
+// Update icons after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  updateIcons(isDarkMode);
+});
+
+// Toggle theme function
+function toggleTheme() {
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  updateIcons(isDark);
+}
+
+if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
+/* ====== Event listeners ====== */
 window.addEventListener("load", updateWrapWidths);
 window.addEventListener("resize", updateWrapWidths);
-inputUrl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    btnCreate.click();
-  }
-});
-customCode.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    btnCreate.click();
-  }
-});
 
+if (inputUrl) {
+  inputUrl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      btnCreate.click();
+    }
+  });
+}
 
-/* ====== optionally expose functions to global for manual use/debug ====== */
+if (customCode) {
+  customCode.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      btnCreate.click();
+    }
+  });
+}
+
+/* ====== expose functions to global for manual use/debug ====== */
 window.SHORTENER = {
   createShorten,
   lookupCode
 };
+

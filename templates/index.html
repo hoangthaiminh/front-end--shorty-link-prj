@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<!-- MXH --!>
-	<link rel="icon" href="{{ url_for('static', path='icons/favicon.ico') }}" />
+    
+    <!-- MXH -->
+    <link rel="icon" href="{{ url_for('static', path='icons/favicon.ico') }}" />
     <meta name="theme-color" content="#D400FF" />
     <meta name="description" content="Rút gọn liên kết nhanh chóng, an toàn và tiện lợi cho học sinh – giáo viên.">
     <meta property="og:title" content="Link shortener" />
-    <meta property="og:description" content="Chia sẻ link cho bạn bè, thầy cô thật nhanh và gọn! Hệ thống rút gọn link dành riêng cho trường, miễn phí và dễ dùng." />
+    <meta property="og:description" content="Chia sẻ link cho bạn bè, thầy cô thật nhanh và gọn! Hệ thống rút gọn link dành riêng cho trường, miễn phí và dễ dàng." />
     <meta property="og:image" content="{{ url_for('static', path='icons/favicon.ico') }}"/>
-	<!---------!>
-	
+
     <title>Link shortener - Rút gọn liên kết</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <!-- Theme initialization script - MUST be before body to prevent flash -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Hai cái này là preload cho dark/lightmode nhưng mik chx làm đc nên tạm đóng>
-    <!-- <link rel="preload" href="{{ url_for('static', path='css/bootstrap-dark.css') }}" as="style"> -->
-    <!-- <link rel="preload" href="{{ url_for('static', path='css/bootstrap-light.css') }}" as="style"> -->
-    
-    <!-- <link id="theme" rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-light.css') }}"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.css">
     <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}">
     
     <script src="{{ url_for('static', path='js/tailwindcss-main.js') }}"></script>
@@ -30,167 +36,180 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/common.css') }}">
 </head>
 <body>
-	<div class="container py-5">
-        <!-- Mik chưa lm đc darkmode =)) -->
-        <!-- <button id="theme_toggle" class="theme-toggle btn btn-sm outline" aria-label="Đổi giao diện"> -->
-          <!-- <i class="bi bi-sun-fill icon icon-light"></i> -->
-          <!-- <i class="bi bi-moon-stars-fill icon icon-dark"></i> -->
-          <!-- <i class="bi bi-circle-half icon icon-system"></i> -->
-        <!-- </button> -->
-
-
-
-        <!-- TITLE -->
-        <div class="text-center mb-6 space-y-2">
-          <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Rút Gọn Liên Kết
-          </h1>
-          <p class="text-gray-500 dark:text-gray-400 text-base">
-            Nhanh chóng – An toàn – Không quảng cáo
-          </p>
-        </div>
-
-
-        <!-- CARD FORM -->
-        <div class="m-7 border border-gray-400 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm rounded-xl overflow-auto">
-            
-            <div class="bg-gray-100 border-b border-gray-200 rounded-t-xl py-3 px-4 md:py-4 md:px-5 dark:bg-neutral-900 dark:border-neutral-700">
-                <p class="mt-1 text-lg font-semibold text-gray-500 dark:text-neutral-700">
-                  Nhập liên kết
-                </p>
-            </div>
-            
-            <div class="p-6 md:p-7">
-            
-                <!-- 1️⃣ NHẬP THÔNG TIN -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        URL cần rút gọn
-                        <span class="text-lg text-red-500 dark:text-red-300">*</span>
-                    </label>
-                    <input 
-                        type="url"
-                        id="input_url"
-                        class="form-control w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-white transition"
-                        required
-                    >
-                    <p id="error_input_url" class="form-error text-red-500 text-sm mt-1"></p>
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">
+                    <i class="bi bi-link-45deg text-2xl"></i>
+                    <span>Link Shortener</span>
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-lg border border-gray-300 dark:border-neutral-700 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill text-yellow-500" id="light-icon-mobile"></i>
+                        <i class="bi bi-moon-stars-fill text-blue-400 hidden" id="dark-icon-mobile"></i>
+                    </button>
+                    
+                    <button class="hs-collapse-toggle p-2 rounded-lg border border-gray-300 dark:border-neutral-700 hover:bg-gray-100 dark:hover:bg-neutral-800" type="button" data-hs-collapse="#navbarNav" aria-controls="navbarNav">
+                        <i class="bi bi-list text-xl"></i>
+                    </button>
                 </div>
-
-                <!-- Tuỳ chọn -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                    <!-- Mã rút gọn -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Mã rút gọn (tuỳ chọn)
-                        </label>
-                        <input 
-                            type="text"
-                            id="custom_code"
-                            class="form-control w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-white transition"
-                        >
-                        <p id="error_custom_code" class="form-error text-red-500 text-sm mt-1"></p>
-                    </div>
-
-                    <!-- Ngày hết hạn -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Ngày hết hạn
-                        </label>
-                        <input 
-                            type="date"
-                            id="expiry_date"
-                            class="form-control w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-white transition"
-                        >
-                        <p id="error_expiry_date" class="form-error text-red-500 text-sm mt-1"></p>
-                    </div>
-
-                </div>
-
-                <!-- 2️⃣ BUTTON -->
-                <div class="text-center pt-2">
-                    <button 
-                        id="btn_create"
-                        class="py-3 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-neutral-900 font-medium hover:bg-gray-800 dark:hover:bg-neutral-200 disabled:opacity-50 transition"
-                    >
-                        <span id="create_text" class="text-base">Tạo liên kết</span>
-
-                        <div id="create_loading"
-                            class="hidden animate-spin inline-block size-6 border-4 border-current border-t-transparent text-gray-300 dark:text-neutral-600 rounded-full"
-                        ></div>
+                
+                <!-- Desktop Menu -->
+                <div id="navbarNav" class="hidden md:flex md:items-center md:gap-6">
+                    <ul class="flex gap-6">
+                        <li><a href="/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Trang chủ</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Hướng dẫn</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Liên hệ</a></li>
+                    </ul>
+                    <button id="theme-toggle" class="p-2 rounded-lg border border-gray-300 dark:border-neutral-700 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill text-yellow-500" id="light-icon"></i>
+                        <i class="bi bi-moon-stars-fill text-blue-400 hidden" id="dark-icon"></i>
                     </button>
                 </div>
             </div>
         </div>
+    </nav>
 
+    <!-- MAIN CONTENT -->
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-2xl">
+            <!-- TITLE -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold mb-3 text-gray-900 dark:text-white">Rút Gọn Liên Kết</h1>
+                <p class="text-lg text-gray-600 dark:text-gray-400">Nhanh chóng – An toàn – Không quảng cáo</p>
+            </div>
 
-        <!-- 3️⃣ KẾT QUẢ -->
-        <div id="result_box" data-role="result"
-             class="m-7 hidden mt-6 border border-gray-400 dark:border-neutral-700 
-                    bg-white dark:bg-neutral-900 overflow-auto
-                    shadow-sm dark:shadow-neutral-800/50 
-                    rounded-xl">
+            <!-- CARD FORM -->
+            <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-neutral-900/50 border border-gray-200 dark:border-neutral-800 overflow-hidden mb-6">
+                <!-- Card Header -->
+                <div class="bg-gray-50 dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Nhập liên kết</h2>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="p-6 space-y-5">
+                    <!-- URL Input -->
+                    <div>
+                        <label for="input_url" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                            URL cần rút gọn
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="url"
+                            id="input_url"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            placeholder="https://example.com"
+                            required
+                        />
+                        <div id="error_input_url" class="mt-1 text-sm text-red-500"></div>
+                    </div>
 
-          <div class="bg-gray-100 border-b border-gray-200 rounded-t-xl py-3 px-4 md:py-4 md:px-5 dark:bg-neutral-900 dark:border-neutral-700">
-            <p class="mt-1 text-lg font-semibold text-gray-500 dark:text-neutral-700">
-              Kết quả
-            </p>
-          </div>
-          
-          <div class="p-5 md:p-6">
+                    <!-- Options Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Custom Code -->
+                        <div>
+                            <label for="custom_code" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                Mã rút gọn (tùy chọn)
+                            </label>
+                            <input 
+                                type="text"
+                                id="custom_code"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                placeholder="mycode"
+                            />
+                            <div id="error_custom_code" class="mt-1 text-sm text-red-500"></div>
+                        </div>
 
-              <!-- Input + Copy -->
-              <div class="flex flex-wrap gap-3 mb-4">
-                <input id="short_url" readonly
-                  class="flex-1 px-4 py-3 rounded-lg bg-white dark:bg-neutral-800
-                         border border-gray-300 dark:border-neutral-600
-                         text-gray-900 dark:text-gray-100
-                         focus:border-gray-500 focus:ring-1 focus:ring-gray-400 
-                         outline-none transition" />
+                        <!-- Expiry Date -->
+                        <div>
+                            <label for="expiry_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                Ngày hết hạn
+                            </label>
+                            <input 
+                                type="date"
+                                id="expiry_date"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            />
+                            <div id="error_expiry_date" class="mt-1 text-sm text-red-500"></div>
+                        </div>
+                    </div>
 
-                <button id="btn_copy" data-role="copy"
-                  class="px-4 min-w-[90px] min-h-[50px] rounded-lg border border-gray-300 
-                         dark:border-neutral-600 
-                         text-gray-700 dark:text-gray-200 
-                         hover:bg-gray-100 dark:hover:bg-neutral-800 
-                         transition flex items-center justify-center gap-x-2">
-
-                  <i class="bi bi-clipboard"></i>
-
-                  Copy
-                </button>
-              </div>
-
-              <!-- QR -->
-              <div class="flex flex-col bg-white border border-gray-300 shadow-2xs rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                  <div class="bg-white border-b border-gray-200 rounded-t-xl py-3 px-4 md:py-4 md:px-5 dark:bg-neutral-300 dark:border-neutral-700">
-                    <p class="mt-1 text-sm text-gray-500 dark:text-neutral-500">
-                      QR Code
-                    </p>
-                  </div>
-                  <div class="p-4 md:p-5">
-                      <div class="flex flex-col gap-3 text-center items-center justify-center mt-5">
-                        <img id="qr_image" src="" alt="QR Code" data-role="qr"
-                             class="rounded-lg border border-gray-200 dark:border-neutral-700 
-                                    p-3 w-40 h-40 bg-white dark:bg-neutral-800 shadow-sm" />
-                        <button id="btn_download_qr" data-role="download-qr" download="qrcode.png"
-                           class="inline-flex items-center gap-x-2 
-                                  px-4 py-2 rounded-lg border border-gray-300 dark:border-neutral-600 
-                                  text-gray-700 dark:text-gray-200 
-                                  hover:bg-gray-100 dark:hover:bg-neutral-800 
-                                  transition cursor-pointer">
-
-                          <i class="bi bi-download"></i>
-
-                          Tải QR
+                    <!-- Submit Button -->
+                    <div class="flex justify-center pt-2">
+                        <button 
+                            id="btn_create"
+                            class="px-8 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                        >
+                            <span id="create_text">Tạo liên kết</span>
+                            <span id="create_loading" class="hidden">
+                                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </span>
                         </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULT BOX -->
+            <div id="result_box" class=" bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-neutral-900/50 border border-gray-200 dark:border-neutral-800 overflow-hidden">
+                <!-- Result Header -->
+                <div class="bg-gray-50 dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Kết quả</h3>
+                </div>
+                
+                <!-- Result Content -->
+                <div class="p-6 space-y-6">
+                    <!-- Short URL Input + Copy Button -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            id="short_url" 
+                            readonly
+                            class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition"
+                        />
+                        <button 
+                            id="btn_copy"
+                            class="px-6 py-3 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 border border-gray-300 dark:border-neutral-700 text-gray-900 dark:text-white font-medium rounded-lg transition flex items-center justify-center gap-2 whitespace-nowrap"
+                        >
+                            <i class="bi bi-clipboard"></i>
+                            Copy
+                        </button>
+                    </div>
+
+                    <!-- QR Code Section -->
+                    <div class="border border-gray-200 dark:border-neutral-800 rounded-lg p-6 text-center bg-gray-50 dark:bg-neutral-800">
+                        <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4">QR Code</h4>
+                        <img 
+                            id="qr_image" 
+                            src="" 
+                            alt="QR Code" 
+                            class="mx-auto w-48 h-48 border border-gray-200 dark:border-neutral-700 rounded-lg p-3 mb-4 bg-white dark:bg-neutral-900"
+                        />
+                        <button 
+                            id="btn_download_qr"
+                            class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg transition flex items-center justify-center gap-2"
+                        >
+                            <i class="bi bi-download"></i>
+                            Tải QR
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Preline & Tailwind JS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.js"></script>
+    
+    <!-- Your existing common.js -->
+    <script src="{{ url_for('static', path='js/common.js') }}"></script>
 </body>
 <script src="{{ url_for('static', path='js/common.js') }}"></script>
+
 </html>
