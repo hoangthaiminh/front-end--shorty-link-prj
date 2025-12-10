@@ -105,7 +105,7 @@
                             placeholder="https://example.com"
                             required
                         />
-                        <div id="error_input_url" class="mt-1 text-sm text-red-500"></div>
+                        <div id="error_input_url" class="form-error mt-1 text-sm text-red-500"></div>
                     </div>
 
                     <!-- Options Row -->
@@ -121,7 +121,7 @@
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 placeholder="mycode"
                             />
-                            <div id="error_custom_code" class="mt-1 text-sm text-red-500"></div>
+                            <div id="error_custom_code" class="form-error mt-1 text-sm text-red-500"></div>
                         </div>
 
                         <!-- Expiry Date -->
@@ -134,7 +134,7 @@
                                 id="expiry_date"
                                 class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
-                            <div id="error_expiry_date" class="mt-1 text-sm text-red-500"></div>
+                            <div id="error_expiry_date" class="form-error mt-1 text-sm text-red-500"></div>
                         </div>
                     </div>
 
@@ -142,7 +142,7 @@
                     <div class="flex justify-center pt-2">
                         <button 
                             id="btn_create"
-                            class="px-8 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                            class="px-8 py-3 bg-neutral-600 hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
                         >
                             <span id="create_text">Tạo liên kết</span>
                             <span id="create_loading" class="hidden">
@@ -157,7 +157,7 @@
             </div>
 
             <!-- RESULT BOX -->
-            <div id="result_box" class=" bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-neutral-900/50 border border-gray-200 dark:border-neutral-800 overflow-hidden">
+            <div id="result_box" class="hidden bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-neutral-900/50 border border-gray-200 dark:border-neutral-800 overflow-hidden">
                 <!-- Result Header -->
                 <div class="bg-gray-50 dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Kết quả</h3>
@@ -192,7 +192,7 @@
                         />
                         <button 
                             id="btn_download_qr"
-                            class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg transition flex items-center justify-center gap-2"
+                            class="w-full px-4 py-2 bg-neutral-600 hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white font-medium rounded-lg transition flex items-center justify-center gap-2"
                         >
                             <i class="bi bi-download"></i>
                             Tải QR
